@@ -50,27 +50,27 @@ NetNinja is an all-in-one security toolkit for the digital age, designed to help
 ## Tools Overview
 
 ### Phishing Link Scanner
-Enter a URL to scan it for potential phishing threats. The tool uses VirusTotal's API to check the URL against multiple security engines and provides a detailed analysis of the results.
+- Enter a URL to scan it for potential phishing threats. The tool uses VirusTotal's API to check the URL against multiple security engines and provides a detailed analysis of the results.
 
 ### Message Encrypter/Decrypter
-Encrypt sensitive messages for secure communication or decrypt encrypted messages. You can provide your own encryption key or let the tool generate one for you. 
+- Encrypt sensitive messages for secure communication or decrypt encrypted messages. You can provide your own encryption key or let the tool generate one for you. 
 
-New feature: After encryption, you can now generate a QR code containing both the encrypted message and the encryption key. This QR code can be scanned to easily share the encrypted information securely.
+- New feature: After encryption, you can now generate a QR code containing both the encrypted message and the encryption key. This QR code can be scanned to easily share the encrypted information securely.
 
 ### File Integrity Checker
-Upload a file to calculate its SHA-256 hash. You can also verify the file's integrity by comparing it against a known hash. Additionally, you can scan the file using VirusTotal for potential threats.
+- Upload a file to calculate its SHA-256 hash. You can also verify the file's integrity by comparing it against a known hash. Additionally, you can scan the file using VirusTotal for potential threats.
 
 ### Password Generator
-Generate strong, unique passwords based on your specified criteria, including length and character types (letters, numbers, symbols).
+- Generate strong, unique passwords based on your specified criteria, including length and character types (letters, numbers, symbols).
 
 ### File Encrypter/Decrypter
-Encrypt files to secure them or decrypt previously encrypted files. The tool uses the Fernet symmetric encryption scheme for file encryption and decryption.
+- Encrypt files to secure them or decrypt previously encrypted files. The tool uses the Fernet symmetric encryption scheme for file encryption and decryption.
 
 ### Password Strength Analyzer
-Enter a password to analyze its strength. The tool provides a score and feedback on how to improve the password's security.
+- Enter a password to analyze its strength. The tool provides a score and feedback on how to improve the password's security.
 
 ### QR Code Generator
-Generate QR codes for easy sharing of information. Enter the data you want to encode, and the tool will create a downloadable QR code image.
+- Generate QR codes for easy sharing of information. Enter the data you want to encode, and the tool will create a downloadable QR code image.
 
 ## Security Considerations
 
