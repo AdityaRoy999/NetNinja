@@ -1,6 +1,8 @@
+streamlit
 requests
-time
-PIL
-re
-datetime 
-qrcode
+cryptography
+pandas
+plotly
+Pillow
+qrcode[pil]  # For QR code generation
+pyzbar
