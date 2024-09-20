@@ -22,7 +22,7 @@ if 'current_page' not in st.session_state:
 
 
 # VirusTotal API key
-VIRUSTOTAL_API_KEY = "3231a4122cc5300001ba8f4873dcc81cfefa8a5186b86e9e5be4ecf089825949"  # Replace with your actual API key
+VIRUSTOTAL_API_KEY = ""  # Replace with your actual API key
 
 st.set_page_config(page_title="NetNinja Security Toolkit", page_icon="🛡️", layout="wide")
 
