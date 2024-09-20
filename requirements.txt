@@ -5,4 +5,5 @@ pandas
 plotly
 Pillow
 qrcode[pil]  # For QR code generation
-pyzbar[decode]
+pyzbar
+
