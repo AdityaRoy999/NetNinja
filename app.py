@@ -8,21 +8,24 @@ import time
 import pandas as pd
 import plotly.express as px
 import io
-from pyzbar.pyzbar import decode
+# from pyzbar.pyzbar import decode
 import json
 from PIL import Image
 import re
 from datetime import datetime
 import qrcode
+import numpy as np
+
 
 # Initialize session state
 # Initialize session state
 if 'current_page' not in st.session_state:
     st.session_state.current_page = 'Home'
+    
 
 
 # VirusTotal API key
-VIRUSTOTAL_API_KEY = ""  # Replace with your actual API key
+VIRUSTOTAL_API_KEY = "3231a4122cc5300001ba8f4873dcc81cfefa8a5186b86e9e5be4ecf089825949"  # Replace with your actual API key
 
 st.set_page_config(page_title="NetNinja Security Toolkit", page_icon="🛡️", layout="wide")
 
@@ -113,6 +116,65 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Helper functions
+
+
+def read_qr_code(image):
+    # Convert the image to a numpy array
+    image_array = np.array(image)
+
+    # Find the QR code bounds
+    bounds = find_qr_bounds(image_array)
+    if bounds is None:
+        return None
+
+    # Extract the QR code region
+    qr_region = image_array[bounds[0]:bounds[1], bounds[2]:bounds[3]]
+
+    # Decode the QR code
+    decoded_data = decode_qr(qr_region)
+
+    return decoded_data
+
+def find_qr_bounds(image):
+    # Simple edge detection
+    edges = np.zeros_like(image[:,:,0])
+    edges[:-1, :] |= image[1:, :, 0] != image[:-1, :, 0]
+    edges[:, :-1] |= image[:, 1:, 0] != image[:, :-1, 0]
+
+    # Find potential QR code region
+    rows = np.any(edges, axis=1)
+    cols = np.any(edges, axis=0)
+    ymin, ymax = np.where(rows)[0][[0, -1]]
+    xmin, xmax = np.where(cols)[0][[0, -1]]
+
+    # Ensure it's square-ish (QR codes are square)
+    size = max(ymax - ymin, xmax - xmin)
+    ymax = min(ymin + size, image.shape[0])
+    xmax = min(xmin + size, image.shape[1])
+
+    return (ymin, ymax, xmin, xmax) if (ymax - ymin) > 20 and (xmax - xmin) > 20 else None
+
+def decode_qr(qr_region):
+    # Simplified QR code decoding
+    # This is a very basic implementation and won't work for all QR codes
+    # It assumes a simple black and white QR code with no error correction
+    
+    # Binarize the image
+    threshold = np.mean(qr_region)
+    binary = (qr_region > threshold).astype(int)
+
+    # Sample the grid
+    grid_size = 21  # Assuming Version 1 QR code
+    sample_points = np.linspace(0, binary.shape[0], grid_size, endpoint=False, dtype=int)
+    sampled = binary[sample_points[:, None], sample_points]
+
+    # Decode the grid (very simplified, assumes specific QR code structure)
+    data = ''
+    for i in range(9, 12):  # Assuming data is in these rows for simplicity
+        for j in range(9):
+            data += str(sampled[i, j])
+
+    return data
 
 # Ensure that get_url_analysis_results(
 
@@ -315,6 +377,8 @@ def phishing_link_scanner():
             # else:
             #     st.error(f"Error: {result}")
 
+
+
 def message_encrypter_decrypter():
     st.header("Message Encrypter/Decrypter")
     message = st.text_area("Enter message:")
@@ -355,28 +419,6 @@ def message_encrypter_decrypter():
             except:
                 st.error("Decryption failed. Make sure you're using the correct key.")
 
-    st.markdown("---")
-    st.subheader("Decrypt from QR Code")
-    uploaded_qr = st.file_uploader("Upload QR Code image", type=['png', 'jpg', 'jpeg'])
-    if uploaded_qr:
-        qr_bytes = uploaded_qr.read()
-        try:
-            qr_image = Image.open(io.BytesIO(qr_bytes))
-            decoded_objects = decode(qr_image)
-            if decoded_objects:
-                qr_data = json.loads(decoded_objects[0].data.decode('utf-8'))
-                encrypted_message = qr_data['encrypted_message']
-                qr_key = qr_data['key']
-                decrypted = decrypt_message(encrypted_message, qr_key)
-                st.success(f"Decrypted message from QR Code: {decrypted}")
-            else:
-                st.error("No QR code found in the image.")
-        except json.JSONDecodeError:
-            st.error("The QR code does not contain valid JSON data.")
-        except KeyError:
-            st.error("The QR code data is missing required fields (encrypted_message or key).")
-        except Exception as e:
-            st.error(f"An error occurred while processing the QR code: {str(e)}")
 
 def file_integrity_checker():
     st.header("File Integrity Checker")
