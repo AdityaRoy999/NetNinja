@@ -118,65 +118,6 @@ st.markdown("""
 # Helper functions
 
 
-def read_qr_code(image):
-    # Convert the image to a numpy array
-    image_array = np.array(image)
-
-    # Find the QR code bounds
-    bounds = find_qr_bounds(image_array)
-    if bounds is None:
-        return None
-
-    # Extract the QR code region
-    qr_region = image_array[bounds[0]:bounds[1], bounds[2]:bounds[3]]
-
-    # Decode the QR code
-    decoded_data = decode_qr(qr_region)
-
-    return decoded_data
-
-def find_qr_bounds(image):
-    # Simple edge detection
-    edges = np.zeros_like(image[:,:,0])
-    edges[:-1, :] |= image[1:, :, 0] != image[:-1, :, 0]
-    edges[:, :-1] |= image[:, 1:, 0] != image[:, :-1, 0]
-
-    # Find potential QR code region
-    rows = np.any(edges, axis=1)
-    cols = np.any(edges, axis=0)
-    ymin, ymax = np.where(rows)[0][[0, -1]]
-    xmin, xmax = np.where(cols)[0][[0, -1]]
-
-    # Ensure it's square-ish (QR codes are square)
-    size = max(ymax - ymin, xmax - xmin)
-    ymax = min(ymin + size, image.shape[0])
-    xmax = min(xmin + size, image.shape[1])
-
-    return (ymin, ymax, xmin, xmax) if (ymax - ymin) > 20 and (xmax - xmin) > 20 else None
-
-def decode_qr(qr_region):
-    # Simplified QR code decoding
-    # This is a very basic implementation and won't work for all QR codes
-    # It assumes a simple black and white QR code with no error correction
-    
-    # Binarize the image
-    threshold = np.mean(qr_region)
-    binary = (qr_region > threshold).astype(int)
-
-    # Sample the grid
-    grid_size = 21  # Assuming Version 1 QR code
-    sample_points = np.linspace(0, binary.shape[0], grid_size, endpoint=False, dtype=int)
-    sampled = binary[sample_points[:, None], sample_points]
-
-    # Decode the grid (very simplified, assumes specific QR code structure)
-    data = ''
-    for i in range(9, 12):  # Assuming data is in these rows for simplicity
-        for j in range(9):
-            data += str(sampled[i, j])
-
-    return data
-
-# Ensure that get_url_analysis_results(
 
 def get_url_analysis_results(analysis_id):
     api_url = f"https://www.virustotal.com/api/v3/analyses/{analysis_id}"
