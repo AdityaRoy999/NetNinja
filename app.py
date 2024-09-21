@@ -23,11 +23,8 @@ if 'current_page' not in st.session_state:
     st.session_state.current_page = 'Home'
 
 
-VIRUSTOTAL_API_KEY = ""  # Replace with your actual API key
 
-headers = {
-    "authorization": st.secrets["VIRUSTOTAL_API_KEY"]
-}
+VIRUSTOTAL_API_KEY = st.secrets["VIRUSTOTAL_API_KEY"]
 
 
 # VirusTotal API key
