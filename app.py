@@ -21,11 +21,17 @@ import numpy as np
 # Initialize session state
 if 'current_page' not in st.session_state:
     st.session_state.current_page = 'Home'
-    
+
+
+VIRUSTOTAL_API_KEY = ""  # Replace with your actual API key
+
+headers = {
+    "authorization": st.secrets["VIRUSTOTAL_API_KEY"]
+}
 
 
 # VirusTotal API key
-VIRUSTOTAL_API_KEY = ""  # Replace with your actual API key
+
 
 st.set_page_config(page_title="NetNinja Security Toolkit", page_icon="🛡️", layout="wide")
 
